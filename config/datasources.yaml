@@ -11,7 +11,7 @@ datasources:
     name: loki
     type: loki
     uid: loki
-    url: http://loki-gateway:8080
+    url: http://loki:8080
     version: 1
 
   - access: proxy

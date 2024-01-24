@@ -1,0 +1,9 @@
+#!/bin/sh
+
+nginx -g 'daemon off;' &
+
+/loki-linux-amd64 -config.file=/etc/loki/loki-read.yaml -target=read -legacy-read-mode=false &
+
+/loki-linux-amd64 -config.file=/etc/loki/loki-write.yaml -target=write &
+
+/loki-linux-amd64 -config.file=/etc/loki/loki-backend.yaml -target=backend -legacy-read-mode=false

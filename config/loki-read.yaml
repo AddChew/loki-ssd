@@ -1,15 +1,15 @@
 auth_enabled: true
 
 server:
-  http_listen_address: 0.0.0.0
+  http_listen_address: localhost
   grpc_listen_address: 0.0.0.0
   http_listen_port: 3100
   grpc_listen_port: 9095
   log_level: info
 
 common:
-  path_prefix: /loki
-  compactor_address: http://loki-backend:3102
+  path_prefix: ./loki
+  compactor_address: http://localhost:3102
   replication_factor: 1
 
 storage_config:
@@ -22,11 +22,11 @@ storage_config:
     s3forcepathstyle: true
 
 memberlist:
-  join_members: ["loki-read:7946", "loki-write:7947", "loki-backend:7948"]
+  join_members: ["localhost:7946", "localhost:7947", "localhost:7948"]
   dead_node_reclaim_time: 30s
   gossip_to_dead_nodes_time: 15s
   left_ingesters_timeout: 30s
-  bind_addr: ['0.0.0.0']
+  bind_addr: ['localhost']
   bind_port: 7946
   gossip_interval: 2s
 
@@ -42,37 +42,13 @@ ingester:
   chunk_idle_period: 1m
   wal:
     enabled: true
-    dir: /loki/wal
+    dir: ./loki/wal
   max_chunk_age: 1m
   chunk_retain_period: 30s
   chunk_encoding: snappy
   chunk_target_size: 1.572864e+06
   chunk_block_size: 262144
   flush_op_timeout: 10s
-
-ruler:
-  enable_api: true
-  enable_sharding: true  
-  wal:
-    dir: /loki/ruler-wal
-  evaluation:
-    mode: remote
-    query_frontend:
-      address: dns:///loki-read:9095
-  storage:
-    type: local
-    local:
-      directory: /loki/rules
-  rule_path: /loki/prom-rules
-  remote_write:
-    enabled: true
-    clients:
-      local:
-         url: http://prometheus:9090/api/v1/write
-         queue_config:
-           # send immediately as soon as a sample is generated
-           capacity: 1
-           batch_send_deadline: 0s
 
 schema_config:
   configs:
@@ -97,7 +73,6 @@ schema_config:
     index:
       prefix: index_
       period: 24h
-
 
 limits_config:
   max_cache_freshness_per_query: '10m'
