@@ -22,7 +22,7 @@ storage_config:
     s3forcepathstyle: true
 
 memberlist:
-  join_members: ["loki-read", "loki-write", "loki-backend"]
+  join_members: ["loki-read:7946", "loki-write:7947", "loki-backend:7948"]
   dead_node_reclaim_time: 30s
   gossip_to_dead_nodes_time: 15s
   left_ingesters_timeout: 30s
