@@ -9,8 +9,8 @@ server:
 
 common:
   path_prefix: /loki
-  compactor_address: http://loki-backend:3100
-  replication_factor: 3
+  compactor_address: http://loki-backend:3102
+  replication_factor: 1
 
 storage_config:
   aws:
@@ -35,7 +35,7 @@ ingester:
     join_after: 10s
     observe_period: 5s
     ring:
-      replication_factor: 3
+      replication_factor: 1
       kvstore:
         store: memberlist
     final_sleep: 0s

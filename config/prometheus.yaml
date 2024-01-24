@@ -10,10 +10,16 @@ scrape_configs:
     dns_sd_configs:
       - names:
           - loki-read
-          - loki-write
-          - loki-backend
         type: A
         port: 3100
+      - names:
+          - loki-write
+        type: A
+        port: 3101
+      - names:
+          - loki-backend
+        type: A
+        port: 3102
   - job_name: 'promtail'
     dns_sd_configs:
       - names:
