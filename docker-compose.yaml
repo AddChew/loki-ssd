@@ -126,8 +126,8 @@ services:
       - "3100"
       - "7946"
       # uncomment to use interactive debugging
-      # - "40000-40002:40000" # makes the replicas available on ports 40000, 40001, 40002
-    command: "-config.file=/etc/loki/loki.yaml -target=read -legacy-read-mode=false"
+      - "40000-40002:40000" # makes the replicas available on ports 40000, 40001, 40002
+    command: "-config.file=/etc/loki/loki-read.yaml -target=read -legacy-read-mode=false"
     networks:
       - loki
     restart: always

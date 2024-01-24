@@ -58,7 +58,7 @@ ruler:
   evaluation:
     mode: remote
     query_frontend:
-      address: dns:///loki-read:9095 # TODO:
+      address: dns:///loki-read:9095
   storage:
     type: local
     local:
