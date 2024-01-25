@@ -8,18 +8,13 @@ server:
   log_level: info
 
 common:
-  path_prefix: ./loki
+  path_prefix: /tmp/loki
   compactor_address: http://localhost:3102
   replication_factor: 1
 
 storage_config:
-  aws:
-    endpoint: minio:9000
-    insecure: true
-    bucketnames: loki-data
-    access_key_id: loki
-    secret_access_key: supersecret
-    s3forcepathstyle: true
+  filesystem:
+    directory: /tmp/loki/
 
 memberlist:
   join_members: ["localhost:7946", "localhost:7947", "localhost:7948"]
@@ -42,7 +37,7 @@ ingester:
   chunk_idle_period: 1m
   wal:
     enabled: true
-    dir: ./loki/wal
+    dir: /tmp/loki/wal
   max_chunk_age: 1m
   chunk_retain_period: 30s
   chunk_encoding: snappy
@@ -54,21 +49,21 @@ schema_config:
   configs:
   - from: 2020-08-01
     store: boltdb-shipper
-    object_store: s3
+    object_store: filesystem
     schema: v11
     index:
       prefix: index_
       period: 24h
   - from: 2023-07-11
     store: tsdb
-    object_store: s3
+    object_store: filesystem
     schema: v12
     index:
       prefix: index_
       period: 24h
   - from: 2024-01-10
     store: tsdb
-    object_store: s3
+    object_store: filesystem
     schema: v12
     index:
       prefix: index_

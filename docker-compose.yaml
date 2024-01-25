@@ -3,7 +3,6 @@ version: "3.8"
 volumes:
   prometheus:
   grafana:
-  alertmanager-data:
 
 services:
 
@@ -48,26 +47,6 @@ services:
     volumes:
       - ./logs/:/var/log/
 
-  minio:
-    image: minio/minio
-    entrypoint:
-      - sh
-      - -euc
-      - |
-        mkdir -p /data/loki-data && \
-        mkdir -p /data/loki-ruler &&
-        minio server --address "0.0.0.0:9000" --console-address "0.0.0.0:9001" /data
-    environment:
-      - MINIO_ROOT_USER=loki
-      - MINIO_ROOT_PASSWORD=supersecret
-      - MINIO_PROMETHEUS_AUTH_TYPE=public
-      - MINIO_UPDATE=off
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - ./.data/minio:/data
-
   loki:
     build:
       context: .
@@ -77,16 +56,6 @@ services:
       - ./config/loki-read.yaml:/etc/loki/loki-read.yaml
       - ./config/loki-write.yaml:/etc/loki/loki-write.yaml
       - ./config/loki-backend.yaml:/etc/loki/loki-backend.yaml
+      - ./loki:/tmp/loki/
     ports:
       - "8080:8080"
-
-  # alertmanager to enable receiving alerts
-  alertmanager:
-    image: prom/alertmanager:v0.23.0
-    restart: unless-stopped
-    ports:
-      - "9093:9093"
-    volumes:
-      - "./config:/config"
-      - alertmanager-data:/data
-    command: --config.file=/config/alertmanager.yml --log.level=debug
